@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://level1main"]
+
+[ext_resource type="Script" uid="uid://b2rg2s7lask1a" path="res://Level1.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqeuntyvar6so" path="res://Player.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://chdcic0dcdefo" path="res://city.png" id="2_lmyl5"]
+[ext_resource type="Script" uid="uid://d0v5pvhuepnit" path="res://RansomwareRex.gd" id="3"]
+[ext_resource type="Texture2D" uid="uid://bblayes4gpja1" path="res://level1char.png" id="4_mlbie"]
+[ext_resource type="Texture2D" uid="uid://dmrcdwyn3wyc4" path="res://ransomware.png" id="6_s3sxq"]
+
+[node name="Level1" type="Node2D" unique_id=429531157]
+script = ExtResource("1")
+
+[node name="Background" type="Sprite2D" parent="." unique_id=99812233]
+position = Vector2(592, 334)
+scale = Vector2(0.53331786, 0.44286704)
+texture = ExtResource("2_lmyl5")
+
+[node name="Player" type="Node2D" parent="." unique_id=1582267388]
+position = Vector2(224, 391)
+script = ExtResource("2")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=76659434]
+position = Vector2(35, 122)
+scale = Vector2(0.48795182, 0.503992)
+texture = ExtResource("4_mlbie")
+
+[node name="RansomwareRex" type="Node2D" parent="." unique_id=219073161]
+position = Vector2(796, 144)
+script = ExtResource("3")
+
+[node name="Sprite2D" type="Sprite2D" parent="RansomwareRex" unique_id=1093920012]
+position = Vector2(32, 223)
+scale = Vector2(0.41566265, 0.5259481)
+texture = ExtResource("6_s3sxq")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=552676449]
+
+[node name="BossHealthBG" type="ColorRect" parent="UI" unique_id=1280895470]
+offset_left = 8.0
+offset_top = 6.0
+offset_right = 280.0
+offset_bottom = 26.0
+color = Color(0.0705882, 0.0705882, 0.0784314, 1)
+
+[node name="BossHealthBar" type="ColorRect" parent="UI/BossHealthBG" unique_id=1832849788]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 2.0
+offset_right = 266.0
+offset_bottom = 18.0
+color = Color(0.898039, 0.129412, 0.129412, 1)
+
+[node name="PlayerHealthBG" type="ColorRect" parent="UI" unique_id=322717622]
+offset_left = 8.0
+offset_top = 34.0
+offset_right = 280.0
+offset_bottom = 46.0
+color = Color(0.0705882, 0.0705882, 0.0784314, 1)
+
+[node name="PlayerHealthBar" type="ColorRect" parent="UI/PlayerHealthBG" unique_id=1129784165]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 1.0
+offset_right = 266.0
+offset_bottom = 11.0
+color = Color(0.129412, 0.898039, 0.215686, 1)
+
+[node name="Projectiles" type="Node2D" parent="." unique_id=1368756322]
+
+[node name="Audio" type="Node" parent="." unique_id=902971276]
+
+[node name="SFX_Land" type="AudioStreamPlayer" parent="Audio" unique_id=1173785299]
+
+[node name="SFX_Shoot" type="AudioStreamPlayer" parent="Audio" unique_id=398768305]
+
+[node name="SFX_Victory" type="AudioStreamPlayer" parent="Audio" unique_id=249806719]

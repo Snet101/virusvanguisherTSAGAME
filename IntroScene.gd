@@ -88,4 +88,16 @@ func start_suck_in():
 	tween.tween_callback(go_to_level_one)
 
 func go_to_level_one():
-	get_tree().change_scene_to_file("res://Level1.tscn")
+	print("IntroScene: attempting to change to Level1")
+	# sanity check: ensure file exists
+	var path = "res://Level1.tscn"
+	var exists = false
+	if Engine.has_singleton("FileAccess"):
+		exists = FileAccess.file_exists(path)
+	else:
+		exists = ResourceLoader.exists(path)
+	if not exists:
+		print("IntroScene: Level1.tscn not found at ", path)
+		return
+	var err = get_tree().change_scene_to_file(path)
+	print("IntroScene: change_scene_to_file returned: ", err)
