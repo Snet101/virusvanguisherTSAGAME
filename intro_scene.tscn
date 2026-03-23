@@ -38,10 +38,10 @@ texture = ExtResource("3_b1u3c")
 
 [node name="TVGlow" type="ColorRect" parent="." unique_id=2031065734]
 modulate = Color(1, 1, 1, 0)
-offset_left = 414.0
-offset_top = 160.0
-offset_right = 732.0
-offset_bottom = 310.0
+offset_left = 362.0
+offset_top = 88.0
+offset_right = 680.0
+offset_bottom = 238.0
 color = Color(0.23921569, 0.9607843, 1, 1)
 
 [node name="TVFlicker" type="ColorRect" parent="." unique_id=1682143531]
