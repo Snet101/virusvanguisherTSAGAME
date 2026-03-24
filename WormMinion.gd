@@ -9,7 +9,7 @@ func _ready():
 
 func _process(delta):
 	position += direction * speed * delta
-	# Simple AI: move toward player
+	# AI: chase player
 	var lvl = get_parent().get_parent()
 	if lvl and lvl.has_node("Player"):
 		var player = lvl.get_node("Player")

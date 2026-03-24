@@ -1,7 +1,6 @@
 extends Node2D
 
-# Tiny enemy spawned from a Gift Box trap in Level 2.
-# Chases the player and deals contact damage.
+# Tiny trap enemy from Gift Box
 
 var health = 20
 var speed = 55
@@ -11,13 +10,13 @@ const CONTACT_DAMAGE = 8
 const CONTACT_RADIUS = 12.0
 
 func _process(delta):
-	# Move toward player
+	# Chase player
 	var level = get_parent().get_parent()
 	if level and level.has_node("Player"):
 		var player = level.get_node("Player")
 		_direction = (player.position - position).normalized()
 
-		# Deal contact damage
+		# Contact damage
 		_attack_cooldown = max(0.0, _attack_cooldown - delta)
 		if position.distance_to(player.position) < CONTACT_RADIUS and _attack_cooldown <= 0.0:
 			if player.has_method("take_damage"):
@@ -33,7 +32,7 @@ func take_damage(amount):
 		queue_free()
 
 func _draw():
-	# Small angry virus sprite — red hexagon with spikes
+	# Virus sprite
 	draw_circle(Vector2.ZERO, 6, Color(0.85, 0.1, 0.1))
 	draw_circle(Vector2.ZERO, 3, Color(0.6, 0.0, 0.0))
 	# Spikes

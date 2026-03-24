@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://didmqnohvruwk" path="res://IntroScene.gd" id="1_2glrg"]
 [ext_resource type="Texture2D" uid="uid://bck6csmcvuhee" path="res://backgroundroom.png" id="2_o8unc"]
 [ext_resource type="Texture2D" uid="uid://1cja3wg5vm5c" path="res://charactersitting.png" id="3_b1u3c"]
+[ext_resource type="Texture2D" uid="uid://ga3cnjb65cft" path="res://assets/starter_screen.png" id="4_s4ndp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2glrg"]
 bg_color = Color(0.05, 0.05, 0.12, 0.95)
@@ -18,6 +19,42 @@ corner_radius_bottom_left = 3
 
 [node name="IntroScene" type="Node2D" unique_id=1444423178]
 script = ExtResource("1_2glrg")
+
+[node name="StarterScreenLayer" type="CanvasLayer" parent="." unique_id=1234567892]
+layer = 100
+
+[node name="StarterScreen" type="Control" parent="StarterScreenLayer" unique_id=1234567890]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="StarterScreenLayer/StarterScreen" unique_id=1234567893]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_s4ndp")
+expand_mode = 1
+
+[node name="StartButton" type="Button" parent="StarterScreenLayer/StarterScreen" unique_id=1234567891]
+custom_minimum_size = Vector2(100, 30)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -15.0
+offset_right = 50.0
+offset_bottom = 15.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 14
+text = "START"
 
 [node name="Background" type="TextureRect" parent="." unique_id=1726999730]
 anchors_preset = 15

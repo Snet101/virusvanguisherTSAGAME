@@ -1,5 +1,5 @@
 extends Node2D
-# Level 3: The Core — Worm King splits on every hit; defeat all copies
+# Level 3: Worm King
 
 @onready var player            = $Player
 @onready var king              = $WormKing
@@ -37,16 +37,16 @@ func _ready():
 		func(): player.set_process(true); player.start_falling()
 	)
 
-func _on_king_health_changed(current, max):
-	var pct = clamp(float(current) / float(max), 0.0, 1.0)
+func _on_king_health_changed(current, max_val):
+	var pct = clamp(float(current) / float(max_val), 0.0, 1.0)
 	health_bar.size.x = (health_bg.size.x - 4) * pct
 
-func _on_player_damaged(current, max):
-	var pct = clamp(float(current) / float(max), 0.0, 1.0)
+func _on_player_damaged(current, max_val):
+	var pct = clamp(float(current) / float(max_val), 0.0, 1.0)
 	player_health_bar.size.x = (player_health_bg.size.x - 4) * pct
 
-func _on_ammo_changed(current, max):
-	var pct = clamp(float(current) / float(max), 0.0, 1.0)
+func _on_ammo_changed(current, max_val):
+	var pct = clamp(float(current) / float(max_val), 0.0, 1.0)
 	ammo_bar.size.x = AMMO_BAR_MAX_W * pct
 	if pct > 0.5:
 		ammo_bar.color = Color(0.2, 0.6, 1.0)
@@ -239,9 +239,9 @@ func _show_victory_screen():
 	btn.pressed.connect(func(): get_tree().change_scene_to_file("res://intro_scene.tscn"))
 	cl.add_child(btn)
 
-func _play_sfx(name: String):
-	if audio_node and audio_node.has_node(name):
-		var sfx = audio_node.get_node(name)
+func _play_sfx(sfx_name: String):
+	if audio_node and audio_node.has_node(sfx_name):
+		var sfx = audio_node.get_node(sfx_name)
 		if sfx and sfx.stream:
 			sfx.play()
 
@@ -276,8 +276,8 @@ func _ensure_placeholders():
 		psprite = Sprite2D.new()
 		psprite.name = "Sprite2D"
 		player.add_child(psprite)
-	if ResourceLoader.exists("res://assets/player.png"):
-		psprite.texture = load("res://assets/player.png")
+	if ResourceLoader.exists("res://assets/TSA.MC.WaterGunPNG.png"):
+		psprite.texture = load("res://assets/TSA.MC.WaterGunPNG.png")
 		var sf_p = 40.0 / psprite.texture.get_height()
 		psprite.scale = Vector2(sf_p, sf_p)
 		player.has_custom_sprite = true

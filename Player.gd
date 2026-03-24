@@ -24,13 +24,13 @@ var hit_flash = 0.0
 var max_ammo = 10
 var ammo = max_ammo
 
-# Status effect timers
+# Status timers
 var slow_timer = 0.0
 var invert_timer = 0.0
 var invincible_timer = 0.0
 var _inv_flash = 0.0
 
-# Set to true by the level when custom art is loaded — disables procedural drawing
+# Custom sprite
 var has_custom_sprite = false
 
 func take_damage(amount):
@@ -84,7 +84,7 @@ func _process(delta):
 	match state:
 		State.FALLING:
 			velocity.y += gravity * delta
-			# Horizontal movement while airborne
+			# Move left/right in air
 			var air_dir = 0
 			if Input.is_action_pressed("ui_left"):
 				air_dir = -1
@@ -98,9 +98,6 @@ func _process(delta):
 			position.x = clamp(position.x, 2, 286)
 			# Double jump
 			var jump_key = "ui_up" if invert_timer <= 0.0 else "ui_down"
-			if Input.is_action_just_pressed(jump_key) and jumps_left > 0:
-				velocity.y = jump_speed
-				jumps_left -= 1
 			if Input.is_action_just_pressed("ui_accept"):
 				_try_fire()
 			position += velocity * delta
@@ -109,12 +106,6 @@ func _process(delta):
 				velocity.y = 0.0
 				_on_landed()
 
-		State.RUBBING_HEAD:
-			rub_timer += delta
-			if rub_timer >= 1.1:
-				state = State.WALKING
-
-		State.WALKING:
 			var dir_x = 0
 			if Input.is_action_pressed("ui_left"):
 				dir_x = -1

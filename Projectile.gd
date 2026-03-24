@@ -7,15 +7,17 @@ var age = 0.0
 var damage = 16
 var owner_is_player = true
 
-# Engulf mode — slow blob that deals damage-over-time while overlapping the player
+# Engulf DoT
 var is_engulf = false
 var dot_timer = 0.0
-var _engulf_entered = false   # true once the player first enters the blob
-const DOT_INTERVAL = 0.25    # seconds between each damage tick (after first hit)
+var _engulf_entered = false   # true on first contact
+const DOT_INTERVAL = 0.25    # damage tick rate
 const ENGULF_RADIUS = 28.0
 
 func _process(delta):
-	position += direction.normalized() * speed * delta
+	# Enemy proj slower for dodging
+	var proj_speed = 200 if not owner_is_player else speed
+	position += direction.normalized() * proj_speed * delta
 	age += delta
 	if age >= lifetime:
 		queue_free()
@@ -73,13 +75,13 @@ func _try_hit_player(root, delta):
 
 	if dist < radius:
 		if is_engulf:
-			# Immediate damage on first contact so the player always feels the hit
-			if not _engulf_entered:
-				_engulf_entered = true
-				dot_timer = 0.0
-				if player.has_method("take_damage"):
-					player.take_damage(damage)
-			# Continuing DoT while overlapping
+		# Instant hit, then DoT
+		if not _engulf_entered:
+			_engulf_entered = true
+			dot_timer = 0.0
+			if player.has_method("take_damage"):
+				player.take_damage(damage)
+		# Tick damage
 			dot_timer += delta
 			if dot_timer >= DOT_INTERVAL:
 				dot_timer = 0.0
@@ -92,21 +94,21 @@ func _try_hit_player(root, delta):
 	else:
 		if is_engulf:
 			dot_timer = 0.0
-			_engulf_entered = false  # reset so re-entry deals damage again
+			_engulf_entered = false  # reset for re-entry
 
 func _draw():
 	if is_engulf:
-		# Pulsing worm-blob — slow, large, gross-looking
+		# Pulsing blob
 		var pulse = 0.75 + 0.25 * sin(age * 7.0)
 		var r = ENGULF_RADIUS * pulse
 		draw_circle(Vector2.ZERO, r, Color(0.25, 0.75, 0.1, 0.55))
 		draw_circle(Vector2.ZERO, r * 0.6, Color(0.4, 0.9, 0.15, 0.75))
-		# Wriggling tentacles
+		# Tentacles
 		for i in range(5):
 			var angle = i * TAU / 5.0 + age * 3.0
 			var tip = Vector2(cos(angle), sin(angle)) * (r + 8.0 * pulse)
 			draw_line(Vector2.ZERO, tip, Color(0.3, 0.85, 0.1, 0.5), 2)
-		# Eye-like center
+		# Eyes
 		draw_circle(Vector2(-3, -2), 3, Color(0.9, 0.95, 0.1))
 		draw_circle(Vector2(3, -2), 3, Color(0.9, 0.95, 0.1))
 		draw_circle(Vector2(-3, -2), 1.5, Color(0.0, 0.0, 0.0))

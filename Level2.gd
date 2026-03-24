@@ -1,5 +1,5 @@
 extends Node2D
-# Level 2: The Corrupted City — dodge fake collectibles, grab real power-ups
+# Level 2: Trojan Horse
 
 @onready var player            = $Player
 @onready var titan             = $TrojanTitan
@@ -13,14 +13,14 @@ extends Node2D
 @onready var audio_node        = $Audio
 @onready var projectiles       = $Projectiles
 
-var enemies_node: Node2D   # for MiniViruses
+var enemies_node: Node2D   # Mini viruses
 
 const AMMO_BAR_MAX_W = 118.0
 
 func _ready():
 	_ensure_placeholders()
 
-	# Create Enemies container for MiniViruses (not in .tscn)
+	# Create enemies node
 	enemies_node = Node2D.new()
 	enemies_node.name = "Enemies"
 	add_child(enemies_node)
@@ -32,7 +32,7 @@ func _ready():
 	player.damaged.connect(_on_player_damaged)
 	player.ammo_changed.connect(_on_ammo_changed)
 	player.died.connect(_on_player_died)
-	# Level 2 starts with only 5 ammo — collect water bottles to earn more
+	# Start with 5 ammo
 	player.max_ammo = 10
 	player.ammo = 5
 	_on_ammo_changed(player.ammo, player.max_ammo)
@@ -47,16 +47,16 @@ func _ready():
 
 	_spawn_collectibles()
 
-func _on_titan_health_changed(current, max):
-	var pct = clamp(float(current) / float(max), 0.0, 1.0)
+func _on_titan_health_changed(current, max_val):
+	var pct = clamp(float(current) / float(max_val), 0.0, 1.0)
 	health_bar.size.x = (health_bg.size.x - 4) * pct
 
-func _on_player_damaged(current, max):
-	var pct = clamp(float(current) / float(max), 0.0, 1.0)
+func _on_player_damaged(current, max_val):
+	var pct = clamp(float(current) / float(max_val), 0.0, 1.0)
 	player_health_bar.size.x = (player_health_bg.size.x - 4) * pct
 
-func _on_ammo_changed(current, max):
-	var pct = clamp(float(current) / float(max), 0.0, 1.0)
+func _on_ammo_changed(current, max_val):
+	var pct = clamp(float(current) / float(max_val), 0.0, 1.0)
 	ammo_bar.size.x = AMMO_BAR_MAX_W * pct
 	if pct > 0.5:
 		ammo_bar.color = Color(0.2, 0.6, 1.0)
@@ -213,9 +213,9 @@ func spawn_enemy_projectile(from_pos, direction):
 func _go_to_level_three():
 	get_tree().change_scene_to_file("res://Level3.tscn")
 
-func _play_sfx(name: String):
-	if audio_node and audio_node.has_node(name):
-		var sfx = audio_node.get_node(name)
+func _play_sfx(sfx_name: String):
+	if audio_node and audio_node.has_node(sfx_name):
+		var sfx = audio_node.get_node(sfx_name)
 		if sfx and sfx.stream:
 			sfx.play()
 
@@ -249,8 +249,8 @@ func _ensure_placeholders():
 		psprite = Sprite2D.new()
 		psprite.name = "Sprite2D"
 		player.add_child(psprite)
-	if ResourceLoader.exists("res://assets/player.png"):
-		psprite.texture = load("res://assets/player.png")
+	if ResourceLoader.exists("res://assets/TSA.MC.WaterGunPNG.png"):
+		psprite.texture = load("res://assets/TSA.MC.WaterGunPNG.png")
 		var sf_p = 40.0 / psprite.texture.get_height()
 		psprite.scale = Vector2(sf_p, sf_p)
 		player.has_custom_sprite = true

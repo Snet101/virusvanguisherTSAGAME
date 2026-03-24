@@ -17,7 +17,7 @@ func _ready():
 func _process(delta):
 	if stunned:
 		return
-	# Fast Lissajous path across the whole screen — same style as Rex
+	# Lissajous path
 	_move_t += delta
 	position.x = clamp(144.0 + sin(_move_t * 2.0) * 78.0 + sin(_move_t * 3.5) * 25.0, 50.0, 258.0)
 	position.y = clamp(68.0 + sin(_move_t * 1.5) * 38.0 + sin(_move_t * 2.7) * 16.0, 30.0, 120.0)
@@ -30,6 +30,9 @@ func _process(delta):
 		if lvl and lvl.has_node("Player"):
 			var player = lvl.get_node("Player")
 			var dir = (player.position - position).normalized()
+			# Attack with spread
+			var spread_angle = randf_range(-0.6, 0.6)  # ±0.6 rad
+			dir = dir.rotated(spread_angle)
 			if lvl.has_method("spawn_enemy_projectile"):
 				lvl.spawn_enemy_projectile(position + Vector2(0, -10), dir)
 	queue_redraw()
@@ -45,7 +48,7 @@ func take_damage(amount):
 		if splits_left > 0:
 			splits_left -= 1
 			split.emit(position, 2)
-			# grab audio_node from parent level
+			# Grab audio
 			var lvl = get_parent()
 			if lvl and lvl.has_node("Audio"):
 				var audio_node = lvl.get_node("Audio")
@@ -61,7 +64,7 @@ func _draw():
 	if has_custom_sprite:
 		return
 	if stunned:
-		# Defeated — hands up (80×50 px body)
+		# Defeated
 		draw_rect(Rect2(Vector2(-40, -25), Vector2(80, 50)), Color(0.5, 0.8, 0.2))
 		draw_line(Vector2(-20, -18), Vector2(-32, -40), Color(0.95, 0.8, 0.6), 3)
 		draw_line(Vector2(20, -18), Vector2(32, -40), Color(0.95, 0.8, 0.6), 3)
@@ -69,13 +72,13 @@ func _draw():
 		var base_col = Color(0.5, 0.8, 0.2)
 		if hit_flash > 0.0:
 			base_col = base_col.lightened(0.4)
-		# Body (80×50 px) with segmented worm look
+		# Body
 		draw_rect(Rect2(Vector2(-40, -25), Vector2(80, 50)), base_col)
-		# Segment lines
+		# Segments
 		for i in range(1, 4):
 			var x = -40 + i * 20
 			draw_line(Vector2(x, -25), Vector2(x, 25), Color(0.3, 0.6, 0.1, 0.5), 2)
-		# Crown spikes
+		# Crown
 		for i in range(5):
 			var x = -24 + i * 12
 			draw_rect(Rect2(Vector2(x, -38), Vector2(6, 13)), Color(0.7, 0.9, 0.4))

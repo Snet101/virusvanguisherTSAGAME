@@ -23,6 +23,9 @@ func _process(delta):
 		if lvl and lvl.has_node("Player"):
 			var player = lvl.get_node("Player")
 			var dir = (player.position - position).normalized()
+			# Attack with spread
+			var spread_angle = randf_range(-0.5, 0.5)  # ±0.5 rad
+			dir = dir.rotated(spread_angle)
 			if lvl.has_method("spawn_enemy_projectile"):
 				lvl.spawn_enemy_projectile(position + Vector2(0, -10), dir)
 func take_damage(amount):
@@ -42,7 +45,7 @@ func _draw():
 	if has_custom_sprite:
 		return
 	if stunned:
-		# Defeated — hands up (80×50 px body)
+		# Defeated
 		draw_rect(Rect2(Vector2(-40, -25), Vector2(80, 50)), Color(0.8, 0.4, 0.0))
 		draw_line(Vector2(-20, -18), Vector2(-32, -40), Color(0.95, 0.8, 0.6), 3)
 		draw_line(Vector2(20, -18), Vector2(32, -40), Color(0.95, 0.8, 0.6), 3)
@@ -50,13 +53,13 @@ func _draw():
 		var base_col = Color(0.8, 0.4, 0.0)
 		if hit_flash > 0.0:
 			base_col = base_col.lightened(0.4)
-		# Body (80×50 px)
+		# Body
 		draw_rect(Rect2(Vector2(-40, -25), Vector2(80, 50)), base_col)
 		# Glitch stripes
 		for i in range(4):
 			var y = -18 + i * 12
 			draw_rect(Rect2(Vector2(-40, y), Vector2(80, 2)), Color(0.0, 0.0, 0.0, 0.35))
-		# Orange particles above
+		# Particles
 		for i in range(5):
 			var x = -24 + i * 12
 			draw_rect(Rect2(Vector2(x, -36), Vector2(8, 8)), Color(0.9, 0.6, 0.2))

@@ -1,6 +1,6 @@
 extends Node2D
 
-# Level 1: Firewall Forest — Ransomware Rex boss fight
+# Level 1: Ransomware Rex
 @onready var player           = $Player
 @onready var rex              = $RansomwareRex
 @onready var health_bg        = $UI/BossHealthBG
@@ -27,7 +27,7 @@ func _ready():
 	player.died.connect(_on_player_died)
 	_on_ammo_changed(player.max_ammo, player.max_ammo)
 
-	# Freeze player until the malware card is dismissed
+	# Freeze player until intro
 	player.set_process(false)
 	_show_level_intro(
 		"RANSOMWARE",
@@ -36,18 +36,18 @@ func _ready():
 		func(): player.set_process(true); player.start_falling()
 	)
 
-func _on_rex_health_changed(current, max):
-	var pct = clamp(float(current) / float(max), 0.0, 1.0)
+func _on_rex_health_changed(current, max_val):
+	var pct = clamp(float(current) / float(max_val), 0.0, 1.0)
 	health_bar.size.x = (health_bg.size.x - 4) * pct
 
-func _on_player_damaged(current, max):
-	var pct = clamp(float(current) / float(max), 0.0, 1.0)
+func _on_player_damaged(current, max_val):
+	var pct = clamp(float(current) / float(max_val), 0.0, 1.0)
 	player_health_bar.size.x = (player_health_bg.size.x - 4) * pct
 
-func _on_ammo_changed(current, max):
-	var pct = clamp(float(current) / float(max), 0.0, 1.0)
+func _on_ammo_changed(current, max_val):
+	var pct = clamp(float(current) / float(max_val), 0.0, 1.0)
 	ammo_bar.size.x = AMMO_BAR_MAX_W * pct
-	# Colour shifts red when low
+	# Ammo color
 	if pct > 0.5:
 		ammo_bar.color = Color(0.2, 0.6, 1.0)
 	elif pct > 0.2:
@@ -60,7 +60,7 @@ func _show_level_intro(virus_name: String, accent: Color, description: String, c
 	cl.layer = 20
 	add_child(cl)
 
-	# Use the same offset_* coordinate system as $UI health bars (288×162 game pixels)
+	# UI size (288x162 game pixels)
 	var bg = ColorRect.new()
 	bg.offset_left = 0; bg.offset_top = 0; bg.offset_right = 288; bg.offset_bottom = 162
 	bg.color = Color(0.02, 0.02, 0.08, 0.95)
@@ -94,13 +94,9 @@ func _show_level_intro(virus_name: String, accent: Color, description: String, c
 	btn.add_theme_font_size_override("font_size", 7)
 	cl.add_child(btn)
 
-	var dismissed = false
 	var dismiss = func():
-		if dismissed:
-			return
 		if not is_instance_valid(cl):
 			return
-		dismissed = true
 		var tw = create_tween()
 		tw.tween_property(cl, "modulate:a", 0.0, 0.35)
 		tw.tween_callback(func():
@@ -173,9 +169,9 @@ func spawn_enemy_projectile(from_pos, direction):
 func _go_to_level_two():
 	get_tree().change_scene_to_file("res://Level2.tscn")
 
-func _play_sfx(name: String):
-	if audio_node and audio_node.has_node(name):
-		var sfx = audio_node.get_node(name)
+func _play_sfx(sfx_name: String):
+	if audio_node and audio_node.has_node(sfx_name):
+		var sfx = audio_node.get_node(sfx_name)
 		if sfx and sfx.stream:
 			sfx.play()
 
@@ -212,8 +208,8 @@ func _ensure_placeholders():
 		psprite = Sprite2D.new()
 		psprite.name = "Sprite2D"
 		player.add_child(psprite)
-	if ResourceLoader.exists("res://assets/player.png"):
-		psprite.texture = load("res://assets/player.png")
+	if ResourceLoader.exists("res://assets/TSA.MC.WaterGunPNG.png"):
+		psprite.texture = load("res://assets/TSA.MC.WaterGunPNG.png")
 		var sf_p = 40.0 / psprite.texture.get_height()
 		psprite.scale = Vector2(sf_p, sf_p)
 		player.has_custom_sprite = true
