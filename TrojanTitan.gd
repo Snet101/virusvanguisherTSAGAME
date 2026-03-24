@@ -4,6 +4,7 @@ signal died()
 var max_health = 250
 var health = 250
 var stunned = false
+var has_custom_sprite = false
 var attack_cooldown = 2.0
 var attack_timer = 1.0
 var attack_variance = 1.2
@@ -38,15 +39,24 @@ func _on_death():
 	queue_redraw()  # update() → queue_redraw()
 	died.emit()
 func _draw():
+	if has_custom_sprite:
+		return
 	if stunned:
-		draw_rect(Rect2(Vector2(-60, -40), Vector2(120, 80)), Color(0.8, 0.4, 0.0))
-		draw_line(Vector2(-30, -30), Vector2(-50, -70), Color(0.95, 0.8, 0.6), 8)
-		draw_line(Vector2(30, -30), Vector2(50, -70), Color(0.95, 0.8, 0.6), 8)
+		# Defeated — hands up (80×50 px body)
+		draw_rect(Rect2(Vector2(-40, -25), Vector2(80, 50)), Color(0.8, 0.4, 0.0))
+		draw_line(Vector2(-20, -18), Vector2(-32, -40), Color(0.95, 0.8, 0.6), 3)
+		draw_line(Vector2(20, -18), Vector2(32, -40), Color(0.95, 0.8, 0.6), 3)
 	else:
 		var base_col = Color(0.8, 0.4, 0.0)
 		if hit_flash > 0.0:
 			base_col = base_col.lightened(0.4)
-		draw_rect(Rect2(Vector2(-80, -60), Vector2(160, 120)), base_col)
-		for i in range(8):
-			var x = -64 + i * 20
-			draw_rect(Rect2(Vector2(x, -76), Vector2(12, 12)), Color(0.9, 0.6, 0.2))
+		# Body (80×50 px)
+		draw_rect(Rect2(Vector2(-40, -25), Vector2(80, 50)), base_col)
+		# Glitch stripes
+		for i in range(4):
+			var y = -18 + i * 12
+			draw_rect(Rect2(Vector2(-40, y), Vector2(80, 2)), Color(0.0, 0.0, 0.0, 0.35))
+		# Orange particles above
+		for i in range(5):
+			var x = -24 + i * 12
+			draw_rect(Rect2(Vector2(x, -36), Vector2(8, 8)), Color(0.9, 0.6, 0.2))

@@ -5,94 +5,93 @@
 [ext_resource type="Texture2D" uid="uid://1cja3wg5vm5c" path="res://charactersitting.png" id="3_b1u3c"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2glrg"]
-bg_color = Color(0.9999855, 0.9999855, 1.0039216, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+bg_color = Color(0.05, 0.05, 0.12, 0.95)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.8, 1, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
-[node name="IntroScene" type="Node2D" unique_id=1327709338]
-position = Vector2(8, 20)
+[node name="IntroScene" type="Node2D" unique_id=1444423178]
 script = ExtResource("1_2glrg")
 
-[node name="Background" type="TextureRect" parent="." unique_id=1189307924]
+[node name="Background" type="TextureRect" parent="." unique_id=1726999730]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -114.0
-offset_top = -232.0
-offset_right = 1422.0
-offset_bottom = 792.0
+offset_left = -129.0
+offset_top = 2.0
+offset_right = 416.0
+offset_bottom = 194.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_o8unc")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="Character" type="Sprite2D" parent="." unique_id=139282642]
-position = Vector2(294, 262)
+[node name="Character" type="Sprite2D" parent="." unique_id=1714040915]
+position = Vector2(74, 90)
+scale = Vector2(0.16911764, 0.17156863)
 texture = ExtResource("3_b1u3c")
 
-[node name="TVGlow" type="ColorRect" parent="." unique_id=2031065734]
+[node name="TVGlow" type="ColorRect" parent="." unique_id=437141603]
 modulate = Color(1, 1, 1, 0)
-offset_left = 362.0
-offset_top = 88.0
-offset_right = 680.0
-offset_bottom = 238.0
-color = Color(0.23921569, 0.9607843, 1, 1)
+offset_left = 89.0
+offset_top = 52.0
+offset_right = 145.0
+offset_bottom = 98.0
+color = Color(0.23921569, 0.9607843, 1, 0.4)
 
-[node name="TVFlicker" type="ColorRect" parent="." unique_id=1682143531]
+[node name="TVFlicker" type="ColorRect" parent="." unique_id=1430843140]
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-metadata/_edit_use_anchors_ = true
+color = Color(0.24, 0.96, 1, 0)
 
-[node name="SpeechBubble" type="Node2D" parent="." unique_id=390760157]
-position = Vector2(34, 14)
+[node name="SpeechBubble" type="Node2D" parent="." unique_id=11345724]
+position = Vector2(90, 60)
 
-[node name="BubblePanel" type="Panel" parent="SpeechBubble" unique_id=138332339]
-offset_left = 107.0
-offset_top = -35.0
-offset_right = 407.0
-offset_bottom = 133.0
+[node name="BubblePanel" type="Panel" parent="SpeechBubble" unique_id=2056616147]
+offset_top = -38.0
+offset_right = 140.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_2glrg")
 
-[node name="Label" type="Label" parent="SpeechBubble/BubblePanel" unique_id=286831999]
+[node name="Label" type="Label" parent="SpeechBubble/BubblePanel" unique_id=1441443656]
 layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.103
-anchor_bottom = 0.53000003
-offset_left = 35.0
-offset_top = 35.0
-offset_right = -2.9000244
-offset_bottom = 32.95999
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/font_size = 30
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
+theme_override_font_sizes/font_size = 8
 text = "Oh nooo what's happening?!"
 autowrap_mode = 2
 
-[node name="Polygon2D" type="Polygon2D" parent="SpeechBubble/BubblePanel" unique_id=1840513429]
-
-[node name="GlitchOverlay" type="ColorRect" parent="." unique_id=1852602548]
+[node name="GlitchOverlay" type="ColorRect" parent="." unique_id=1078445202]
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-metadata/_edit_use_anchors_ = true
+color = Color(0.2, 0.9, 1, 1)
 
-[node name="FadeOverlay" type="ColorRect" parent="." unique_id=520600521]
+[node name="FadeOverlay" type="ColorRect" parent="." unique_id=1145135738]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0)
-metadata/_edit_use_anchors_ = true

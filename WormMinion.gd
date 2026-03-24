@@ -21,4 +21,6 @@ func take_damage(amount):
 		queue_free()
 
 func _draw():
-	draw_rect(Rect2(Vector2(-20, -15), Vector2(40, 30)), Color(0.5, 0.8, 0.2))
+	draw_rect(Rect2(Vector2(-5, -4), Vector2(10, 8)), Color(0.5, 0.8, 0.2))
+	draw_circle(Vector2(-2, -1), 1, Color(0.9, 0.95, 0.2))
+	draw_circle(Vector2(2, -1), 1, Color(0.9, 0.95, 0.2))

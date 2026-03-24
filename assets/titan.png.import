@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://chdcic0dcdefo"
-path="res://.godot/imported/city.png-93720b2a7c012586f730831b50dcc97a.ctex"
+uid="uid://bstx8bslpd5n"
+path="res://.godot/imported/titan.png-88ca5d920bf496c2a31d712082faa1e9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://city.png"
-dest_files=["res://.godot/imported/city.png-93720b2a7c012586f730831b50dcc97a.ctex"]
+source_file="res://assets/titan.png"
+dest_files=["res://.godot/imported/titan.png-88ca5d920bf496c2a31d712082faa1e9.ctex"]
 
 [params]
 

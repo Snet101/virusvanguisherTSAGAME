@@ -1,63 +1,111 @@
 [gd_scene format=3 uid="uid://level2main"]
 
-[ext_resource type="Script" uid="uid://b2rg2s7lask1b" path="res://Level2.gd" id="1"]
-[ext_resource type="Script" uid="uid://dqeuntyvar6sp" path="res://Player.gd" id="2"]
-[ext_resource type="Script" uid="uid://d0v5pvhuepnju" path="res://TrojanTitan.gd" id="3"]
+[ext_resource type="Script" uid="uid://ca4ejitnnkc8n" path="res://Level2.gd" id="1"]
+[ext_resource type="Script" uid="uid://dqeuntyvar6so" path="res://Player.gd" id="2"]
+[ext_resource type="Texture2D" uid="uid://chdcic0dcdefo" path="res://assets/background.png" id="2_ex07k"]
+[ext_resource type="Script" uid="uid://csv72h2pbkio5" path="res://TrojanTitan.gd" id="3"]
 
-[node name="Level2" type="Node2D" unique_id=429531158]
+[node name="Level2" type="Node2D" unique_id=1239250524]
 script = ExtResource("1")
 
-[node name="Background" type="Sprite2D" parent="." unique_id=99812234]
-region = false
-offset = Vector2(0, 0)
-position = Vector2(0, 0)
+[node name="Background" type="Sprite2D" parent="." unique_id=117413337]
+position = Vector2(143.37502, 80.75)
+scale = Vector2(0.13385367, 0.11114958)
+texture = ExtResource("2_ex07k")
 
-[node name="Player" type="Node2D" parent="." unique_id=1582267389]
-position = Vector2(48, 120)
+[node name="Player" type="Node2D" parent="." unique_id=1196551349]
+position = Vector2(48, 129)
 script = ExtResource("2")
 
-[node name="TrojanTitan" type="Node2D" parent="." unique_id=219073162]
-position = Vector2(220, 110)
+[node name="TrojanTitan" type="Node2D" parent="." unique_id=1647467855]
+position = Vector2(220, 82)
 script = ExtResource("3")
 
-[node name="Collectibles" type="Node2D" parent="." unique_id=1368756323]
+[node name="Collectibles" type="Node2D" parent="." unique_id=1749514236]
 
-[node name="Projectiles" type="Node2D" parent="." unique_id=1368756324]
+[node name="Projectiles" type="Node2D" parent="." unique_id=746914454]
 
-[node name="UI" type="CanvasLayer" parent="." unique_id=552676450]
+[node name="UI" type="CanvasLayer" parent="." unique_id=632878283]
 
-[node name="BossHealthBG" type="ColorRect" parent="UI" unique_id=1280895471]
+[node name="BossHealthBG" type="ColorRect" parent="UI" unique_id=1082828558]
 offset_left = 8.0
 offset_top = 6.0
 offset_right = 280.0
-offset_bottom = 26.0
+offset_bottom = 18.0
 color = Color(0.0705882, 0.0705882, 0.0784314, 1)
 
-[node name="BossHealthBar" type="ColorRect" parent="UI/BossHealthBG" unique_id=1832849789]
+[node name="BossHealthBar" type="ColorRect" parent="UI/BossHealthBG" unique_id=711453926]
 layout_mode = 0
-offset_left = 6.0
+offset_left = 2.0
 offset_top = 2.0
-offset_right = 266.0
-offset_bottom = 18.0
+offset_right = 270.0
+offset_bottom = 10.0
 color = Color(0.898039, 0.129412, 0.129412, 1)
 
-[node name="PlayerHealthBG" type="ColorRect" parent="UI" unique_id=322717623]
+[node name="BossLabel" type="Label" parent="UI/BossHealthBG" unique_id=1097634508]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 1.0
+offset_right = 110.0
+offset_bottom = 11.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 7
+text = "TROJAN TITAN"
+
+[node name="PlayerHealthBG" type="ColorRect" parent="UI" unique_id=48890104]
 offset_left = 8.0
-offset_top = 34.0
+offset_top = 22.0
 offset_right = 280.0
+offset_bottom = 32.0
+color = Color(0.0705882, 0.0705882, 0.0784314, 1)
+
+[node name="PlayerHealthBar" type="ColorRect" parent="UI/PlayerHealthBG" unique_id=1512474473]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 1.0
+offset_right = 270.0
+offset_bottom = 8.0
+color = Color(0.129412, 0.898039, 0.215686, 1)
+
+[node name="PlayerLabel" type="Label" parent="UI/PlayerHealthBG" unique_id=1334370289]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 60.0
+offset_bottom = 10.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 7
+text = "PLAYER"
+
+[node name="AmmoBG" type="ColorRect" parent="UI" unique_id=1361170511]
+offset_left = 8.0
+offset_top = 36.0
+offset_right = 130.0
 offset_bottom = 46.0
 color = Color(0.0705882, 0.0705882, 0.0784314, 1)
 
-[node name="PlayerHealthBar" type="ColorRect" parent="UI/PlayerHealthBG" unique_id=1129784166]
+[node name="AmmoBar" type="ColorRect" parent="UI/AmmoBG" unique_id=75136999]
 layout_mode = 0
-offset_left = 6.0
+offset_left = 2.0
 offset_top = 1.0
-offset_right = 266.0
-offset_bottom = 11.0
-color = Color(0.129412, 0.898039, 0.215686, 1)
+offset_right = 120.0
+offset_bottom = 8.0
+color = Color(0.2, 0.6, 1, 1)
 
-[node name="Audio" type="Node" parent="." unique_id=902971277]
+[node name="AmmoLabel" type="Label" parent="UI/AmmoBG" unique_id=1976761565]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 80.0
+offset_bottom = 10.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 7
+text = "AMMO"
 
-[node name="SFX_Collect" type="AudioStreamPlayer" parent="Audio" unique_id=1173785300]
+[node name="Audio" type="Node" parent="." unique_id=1500034451]
 
-[node name="SFX_Hurt" type="AudioStreamPlayer" parent="Audio" unique_id=398768306]
+[node name="SFX_Shoot" type="AudioStreamPlayer" parent="Audio" unique_id=1746811450]
+
+[node name="SFX_Land" type="AudioStreamPlayer" parent="Audio" unique_id=1802940660]
+
+[node name="SFX_Collect" type="AudioStreamPlayer" parent="Audio" unique_id=188495570]
+
+[node name="SFX_Hurt" type="AudioStreamPlayer" parent="Audio" unique_id=510045292]

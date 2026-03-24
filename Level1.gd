@@ -1,59 +1,157 @@
 extends Node2D
 
-# Level 1: Firewall Forest — basic flow and UI hookups
-@onready var player = $Player
-@onready var rex = $RansomwareRex
-@onready var health_bg = $UI/BossHealthBG
-@onready var health_bar = $UI/BossHealthBG/BossHealthBar
-@onready var projectiles = $Projectiles
-
-const VIEW_WIDTH = 288
-const VIEW_HEIGHT = 162
+# Level 1: Firewall Forest — Ransomware Rex boss fight
+@onready var player           = $Player
+@onready var rex              = $RansomwareRex
+@onready var health_bg        = $UI/BossHealthBG
+@onready var health_bar       = $UI/BossHealthBG/BossHealthBar
+@onready var player_health_bg = $UI/PlayerHealthBG
 @onready var player_health_bar = $UI/PlayerHealthBG/PlayerHealthBar
-@onready var audio_node = $Audio
+@onready var ammo_bg          = $UI/AmmoBG
+@onready var ammo_bar         = $UI/AmmoBG/AmmoBar
+@onready var projectiles      = $Projectiles
+@onready var audio_node       = $Audio
+
+const AMMO_BAR_MAX_W = 118.0
 
 func _ready():
 	_ensure_placeholders()
 
-	# Godot 4: use signal.connect(callable) instead of connect("signal", self, "method")
 	rex.health_changed.connect(_on_rex_health_changed)
 	rex.died.connect(_on_rex_died)
 
 	player.fired.connect(_on_player_fired)
 	player.landed.connect(_on_player_landed)
 	player.damaged.connect(_on_player_damaged)
-	player.call_deferred("start_falling")
+	player.ammo_changed.connect(_on_ammo_changed)
+	player.died.connect(_on_player_died)
+	_on_ammo_changed(player.max_ammo, player.max_ammo)
+
+	# Freeze player until the malware card is dismissed
+	player.set_process(false)
+	_show_level_intro(
+		"RANSOMWARE",
+		Color(0.9, 0.2, 0.1),
+		"This malware locks a user's computer or encrypts files, making them inaccessible, and demands a ransom payment to restore access.",
+		func(): player.set_process(true); player.start_falling()
+	)
 
 func _on_rex_health_changed(current, max):
 	var pct = clamp(float(current) / float(max), 0.0, 1.0)
-	var inner_max_w = health_bg.size.x - 12
-	health_bar.size.x = int(inner_max_w * pct)
+	health_bar.size.x = (health_bg.size.x - 4) * pct
 
 func _on_player_damaged(current, max):
 	var pct = clamp(float(current) / float(max), 0.0, 1.0)
-	var inner_max_w = $UI/PlayerHealthBG.size.x - 12
-	player_health_bar.size.x = int(inner_max_w * pct)
+	player_health_bar.size.x = (player_health_bg.size.x - 4) * pct
+
+func _on_ammo_changed(current, max):
+	var pct = clamp(float(current) / float(max), 0.0, 1.0)
+	ammo_bar.size.x = AMMO_BAR_MAX_W * pct
+	# Colour shifts red when low
+	if pct > 0.5:
+		ammo_bar.color = Color(0.2, 0.6, 1.0)
+	elif pct > 0.2:
+		ammo_bar.color = Color(1.0, 0.7, 0.1)
+	else:
+		ammo_bar.color = Color(0.9, 0.1, 0.1)
+
+func _show_level_intro(virus_name: String, accent: Color, description: String, callback: Callable):
+	var cl = CanvasLayer.new()
+	cl.layer = 20
+	add_child(cl)
+
+	# Use the same offset_* coordinate system as $UI health bars (288×162 game pixels)
+	var bg = ColorRect.new()
+	bg.offset_left = 0; bg.offset_top = 0; bg.offset_right = 288; bg.offset_bottom = 162
+	bg.color = Color(0.02, 0.02, 0.08, 0.95)
+	cl.add_child(bg)
+
+	var badge = ColorRect.new()
+	badge.offset_left = 0; badge.offset_top = 24; badge.offset_right = 288; badge.offset_bottom = 26
+	badge.color = accent
+	cl.add_child(badge)
+
+	var title = Label.new()
+	title.text = "VIRUS ALERT: " + virus_name
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.offset_left = 0; title.offset_top = 6; title.offset_right = 288; title.offset_bottom = 22
+	title.add_theme_font_size_override("font_size", 9)
+	title.add_theme_color_override("font_color", accent)
+	cl.add_child(title)
+
+	var desc = Label.new()
+	desc.text = description
+	desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	desc.offset_left = 12; desc.offset_top = 30; desc.offset_right = 276; desc.offset_bottom = 136
+	desc.add_theme_font_size_override("font_size", 7)
+	desc.add_theme_color_override("font_color", Color(0.9, 0.92, 1.0))
+	desc.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	cl.add_child(desc)
+
+	var btn = Button.new()
+	btn.text = "TAP TO FIGHT"
+	btn.offset_left = 84; btn.offset_top = 140; btn.offset_right = 204; btn.offset_bottom = 154
+	btn.add_theme_font_size_override("font_size", 7)
+	cl.add_child(btn)
+
+	var dismissed = false
+	var dismiss = func():
+		if dismissed:
+			return
+		if not is_instance_valid(cl):
+			return
+		dismissed = true
+		var tw = create_tween()
+		tw.tween_property(cl, "modulate:a", 0.0, 0.35)
+		tw.tween_callback(func():
+			if is_instance_valid(cl):
+				cl.queue_free()
+			callback.call()
+		)
+
+	btn.pressed.connect(dismiss)
+	btn.grab_focus()
+	get_tree().create_timer(6.0).timeout.connect(dismiss)
+
+func _on_player_died():
+	_show_death_screen()
+
+func _show_death_screen():
+	var cl = CanvasLayer.new()
+	cl.layer = 10
+	add_child(cl)
+	var overlay = ColorRect.new()
+	overlay.anchors_preset = 15
+	overlay.anchor_right = 1.0
+	overlay.anchor_bottom = 1.0
+	overlay.color = Color(0.5, 0.0, 0.0, 0.0)
+	cl.add_child(overlay)
+	var lbl = Label.new()
+	lbl.text = "YOU DIED"
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	lbl.anchors_preset = 15
+	lbl.anchor_right = 1.0
+	lbl.anchor_bottom = 1.0
+	lbl.add_theme_font_size_override("font_size", 20)
+	lbl.add_theme_color_override("font_color", Color(1.0, 0.15, 0.15))
+	cl.add_child(lbl)
+	var tween = create_tween()
+	tween.tween_property(overlay, "color:a", 0.75, 0.4)
+	tween.tween_interval(1.2)
+	tween.tween_callback(func(): get_tree().reload_current_scene())
 
 func _on_rex_died():
 	health_bar.color = Color(0.2, 0.9, 0.3)
-	if audio_node and audio_node.has_node("SFX_Victory"):
-		var sv = audio_node.get_node("SFX_Victory")
-		if sv and sv.stream:
-			sv.play()
+	_play_sfx("SFX_Victory")
 	call_deferred("_go_to_level_two")
 
 func _on_player_fired(from_pos, direction):
 	spawn_player_projectile(from_pos, direction)
-	if audio_node and audio_node.has_node("SFX_Shoot"):
-		var sfx = audio_node.get_node("SFX_Shoot")
-		if sfx and sfx.stream:
-			sfx.play()
+	_play_sfx("SFX_Shoot")
 
 func _on_player_landed():
-	if audio_node and audio_node.has_node("SFX_Land"):
-		var sl = audio_node.get_node("SFX_Land")
-		if sl and sl.stream:
-			sl.play()
+	_play_sfx("SFX_Land")
 
 func spawn_player_projectile(from_pos, direction):
 	var p = Node2D.new()
@@ -61,6 +159,7 @@ func spawn_player_projectile(from_pos, direction):
 	p.position = from_pos
 	p.direction = direction
 	p.owner_is_player = true
+	p.damage = 30
 	projectiles.add_child(p)
 
 func spawn_enemy_projectile(from_pos, direction):
@@ -74,73 +173,68 @@ func spawn_enemy_projectile(from_pos, direction):
 func _go_to_level_two():
 	get_tree().change_scene_to_file("res://Level2.tscn")
 
-# --- Helpers ---
+func _play_sfx(name: String):
+	if audio_node and audio_node.has_node(name):
+		var sfx = audio_node.get_node(name)
+		if sfx and sfx.stream:
+			sfx.play()
 
 func _make_tex(col: Color, w: int, h: int) -> ImageTexture:
 	var img = Image.create(w, h, false, Image.FORMAT_RGBA8)
-	for y in range(h):
-		for x in range(w):
-			img.set_pixel(x, y, col)
-	var tex = ImageTexture.create_from_image(img)
-	return tex
+	img.fill(col)
+	return ImageTexture.create_from_image(img)
 
 func _make_silence() -> AudioStreamWAV:
-	# AudioStreamSample was renamed to AudioStreamWAV in Godot 4
-	var sample = AudioStreamWAV.new()
-	sample.format = AudioStreamWAV.FORMAT_16_BITS
-	sample.mix_rate = 22050
-	sample.stereo = false
-	sample.loop_mode = AudioStreamWAV.LOOP_DISABLED
-	sample.data = PackedByteArray()  # PoolByteArray renamed to PackedByteArray
-	return sample
+	var s = AudioStreamWAV.new()
+	s.format = AudioStreamWAV.FORMAT_16_BITS
+	s.mix_rate = 22050
+	s.stereo = false
+	s.loop_mode = AudioStreamWAV.LOOP_DISABLED
+	s.data = PackedByteArray()
+	return s
 
 func _ensure_placeholders():
-	# Prefer user-provided assets in res://assets/ (player.png, rex.png, background.png)
-	var assets_dir = "res://assets/"
-	var player_path = assets_dir + "player.png"
-	var rex_path = assets_dir + "rex.png"
-	var bg_path = assets_dir + "background.png"
+	# Background: try assets/background.png, else solid dark-green
+	var bg = get_node_or_null("Background")
+	if bg:
+		if ResourceLoader.exists("res://assets/background.png"):
+			var tex = load("res://assets/background.png")
+			bg.texture = tex
+			bg.scale = Vector2(288.0 / tex.get_width(), 162.0 / tex.get_height())
+		else:
+			bg.texture = _make_tex(Color(0.1, 0.18, 0.08), 288, 162)
 
-	# Background
-	if has_node("Background"):
-		var bg = get_node("Background")
-		if ResourceLoader.exists(bg_path):
-			bg.texture = load(bg_path)
-		# else leave background empty (procedural or editor background)
-
-	# Player sprite: load user asset if present, otherwise procedural
-	var psprite: Sprite2D = null
+	# Player sprite
+	var psprite: Sprite2D
 	if player.has_node("Sprite2D"):
 		psprite = player.get_node("Sprite2D")
 	else:
 		psprite = Sprite2D.new()
 		psprite.name = "Sprite2D"
 		player.add_child(psprite)
+	if ResourceLoader.exists("res://assets/player.png"):
+		psprite.texture = load("res://assets/player.png")
+		var sf_p = 40.0 / psprite.texture.get_height()
+		psprite.scale = Vector2(sf_p, sf_p)
+		player.has_custom_sprite = true
 
-	if ResourceLoader.exists(player_path):
-		psprite.texture = load(player_path)
-	else:
-		psprite.texture = _make_tex(Color(0.2, 0.6, 1.0, 1), 32, 32)
-
-	# Ransomware Rex sprite
-	var rsprite: Sprite2D = null
+	# Rex sprite
+	var rsprite: Sprite2D
 	if rex.has_node("Sprite2D"):
 		rsprite = rex.get_node("Sprite2D")
 	else:
 		rsprite = Sprite2D.new()
 		rsprite.name = "Sprite2D"
 		rex.add_child(rsprite)
+	if ResourceLoader.exists("res://assets/rex.png"):
+		rsprite.texture = load("res://assets/rex.png")
+		var sf_r = 50.0 / rsprite.texture.get_height()
+		rsprite.scale = Vector2(sf_r, sf_r)
+		rex.has_custom_sprite = true
 
-	if ResourceLoader.exists(rex_path):
-		rsprite.texture = load(rex_path)
-	else:
-		rsprite.texture = _make_tex(Color(0.6, 0.0, 0.6, 1), 160, 120)
-
-	var an = get_node("Audio") if has_node("Audio") else null
-	if an:
-		if an.has_node("SFX_Land"):
-			an.get_node("SFX_Land").stream = _make_silence()
-		if an.has_node("SFX_Shoot"):
-			an.get_node("SFX_Shoot").stream = _make_silence()
-		if an.has_node("SFX_Victory"):
-			an.get_node("SFX_Victory").stream = _make_silence()
+	# Audio placeholders
+	for sfx_name in ["SFX_Land", "SFX_Shoot", "SFX_Victory"]:
+		if audio_node and audio_node.has_node(sfx_name):
+			var n = audio_node.get_node(sfx_name)
+			if n and not n.stream:
+				n.stream = _make_silence()

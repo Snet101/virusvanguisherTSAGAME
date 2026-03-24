@@ -4,57 +4,105 @@
 [ext_resource type="Script" uid="uid://dqeuntyvar6so" path="res://Player.gd" id="2"]
 [ext_resource type="Script" uid="uid://c6mmxmgemsam8" path="res://WormKing.gd" id="3"]
 
-[node name="Level3" type="Node2D" unique_id=429531159]
+[node name="Level3" type="Node2D" unique_id=1312996522]
 script = ExtResource("1")
 
-[node name="Background" type="Sprite2D" parent="." unique_id=99812235]
+[node name="Background" type="Sprite2D" parent="." unique_id=1385843661]
+position = Vector2(144, 81)
 
-[node name="Player" type="Node2D" parent="." unique_id=1582267390]
+[node name="Player" type="Node2D" parent="." unique_id=502071690]
 position = Vector2(48, 120)
 script = ExtResource("2")
 
-[node name="WormKing" type="Node2D" parent="." unique_id=219073163]
-position = Vector2(220, 110)
+[node name="WormKing" type="Node2D" parent="." unique_id=831040204]
+position = Vector2(220, 82)
 script = ExtResource("3")
 
-[node name="Enemies" type="Node2D" parent="." unique_id=1368756324]
+[node name="Enemies" type="Node2D" parent="." unique_id=94689540]
 
-[node name="Projectiles" type="Node2D" parent="." unique_id=1368756325]
+[node name="Projectiles" type="Node2D" parent="." unique_id=155073999]
 
-[node name="UI" type="CanvasLayer" parent="." unique_id=552676451]
+[node name="UI" type="CanvasLayer" parent="." unique_id=2101345959]
 
-[node name="BossHealthBG" type="ColorRect" parent="UI" unique_id=1280895472]
+[node name="BossHealthBG" type="ColorRect" parent="UI" unique_id=367549293]
 offset_left = 8.0
 offset_top = 6.0
 offset_right = 280.0
-offset_bottom = 26.0
+offset_bottom = 18.0
 color = Color(0.0705882, 0.0705882, 0.0784314, 1)
 
-[node name="BossHealthBar" type="ColorRect" parent="UI/BossHealthBG" unique_id=1832849790]
+[node name="BossHealthBar" type="ColorRect" parent="UI/BossHealthBG" unique_id=540887174]
 layout_mode = 0
-offset_left = 6.0
+offset_left = 2.0
 offset_top = 2.0
-offset_right = 266.0
-offset_bottom = 18.0
+offset_right = 270.0
+offset_bottom = 10.0
 color = Color(0.898039, 0.129412, 0.129412, 1)
 
-[node name="PlayerHealthBG" type="ColorRect" parent="UI" unique_id=322717624]
+[node name="BossLabel" type="Label" parent="UI/BossHealthBG" unique_id=297155808]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 1.0
+offset_right = 90.0
+offset_bottom = 11.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 7
+text = "WORM KING"
+
+[node name="PlayerHealthBG" type="ColorRect" parent="UI" unique_id=71952257]
 offset_left = 8.0
-offset_top = 34.0
+offset_top = 22.0
 offset_right = 280.0
+offset_bottom = 32.0
+color = Color(0.0705882, 0.0705882, 0.0784314, 1)
+
+[node name="PlayerHealthBar" type="ColorRect" parent="UI/PlayerHealthBG" unique_id=1534112131]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 1.0
+offset_right = 270.0
+offset_bottom = 8.0
+color = Color(0.129412, 0.898039, 0.215686, 1)
+
+[node name="PlayerLabel" type="Label" parent="UI/PlayerHealthBG" unique_id=86159148]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 60.0
+offset_bottom = 10.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 7
+text = "PLAYER"
+
+[node name="AmmoBG" type="ColorRect" parent="UI" unique_id=1347172068]
+offset_left = 8.0
+offset_top = 36.0
+offset_right = 130.0
 offset_bottom = 46.0
 color = Color(0.0705882, 0.0705882, 0.0784314, 1)
 
-[node name="PlayerHealthBar" type="ColorRect" parent="UI/PlayerHealthBG" unique_id=1129784167]
+[node name="AmmoBar" type="ColorRect" parent="UI/AmmoBG" unique_id=650969419]
 layout_mode = 0
-offset_left = 6.0
+offset_left = 2.0
 offset_top = 1.0
-offset_right = 266.0
-offset_bottom = 11.0
-color = Color(0.129412, 0.898039, 0.215686, 1)
+offset_right = 120.0
+offset_bottom = 8.0
+color = Color(0.2, 0.6, 1, 1)
 
-[node name="Audio" type="Node" parent="." unique_id=902971278]
+[node name="AmmoLabel" type="Label" parent="UI/AmmoBG" unique_id=1657704525]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 80.0
+offset_bottom = 10.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 7
+text = "AMMO"
 
-[node name="SFX_Charge" type="AudioStreamPlayer" parent="Audio" unique_id=1173785301]
+[node name="Audio" type="Node" parent="." unique_id=1794127206]
 
-[node name="SFX_Split" type="AudioStreamPlayer" parent="Audio" unique_id=398768307]
+[node name="SFX_Charge" type="AudioStreamPlayer" parent="Audio" unique_id=1267034789]
+
+[node name="SFX_Split" type="AudioStreamPlayer" parent="Audio" unique_id=1946079168]
+
+[node name="SFX_Land" type="AudioStreamPlayer" parent="Audio" unique_id=926988059]
+
+[node name="SFX_Victory" type="AudioStreamPlayer" parent="Audio" unique_id=1605813965]
